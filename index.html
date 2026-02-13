@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>The Wedding of Lisa & Palmer</title>
+    
+    <!-- Google Fonts untuk meniru font asli -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            /* Warna diambil dari file asli */
+            --inv-bg: #003f30; /* Hijau Emerald Gelap */
+            --inv-accent: #f9e7bc; /* Cream/Emas Muda */
+            --inv-border: #7b938f;
+            --font-latin: 'Great Vibes', cursive; /* Untuk Nama */
+            --font-header: 'Cinzel', serif; /* Untuk Judul */
+            --font-body: 'Work Sans', sans-serif; /* Untuk Teks Biasa */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--inv-bg);
+            color: #ffffff;
+            font-family: var(--font-body);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Container Utama */
+        #app {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 480px; /* Batas lebar tampilan HP */
+            margin: 0 auto;
+            background-image: url('http://dwigital.com/themes/bugis-emerald/bg.webp');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Dekorasi Pilar & Bunga (Frame) */
+        .frame-decor {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            max-width: 100%;
+        }
+        .frame-top-left { top: 0; left: 0; width: 35%; }
+        .frame-top-right { top: 0; right: 0; width: 35%; }
+        .frame-bottom-left { bottom: 0; left: 0; width: 35%; }
+        .frame-bottom-right { bottom: 0; right: 0; width: 35%; }
+        .frame-pillar-left { top: 0; left: 0; height: 100%; width: auto; max-width: 15%; object-fit: cover;}
+        .frame-pillar-right { top: 0; right: 0; height: 100%; width: auto; max-width: 15%; object-fit: cover;}
+
+        /* Section Styling */
+        section {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px; /* Padding agar tidak tertutup pilar */
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s ease-in-out;
+            z-index: 5;
+            padding-bottom: 80px; /* Space untuk navigasi bawah */
+        }
+
+        section.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Elemen Cover */
+        .wedding-date {
+            font-family: var(--font-header);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            margin-top: -40px;
+        }
+
+        .couple-circle-frame {
+            width: 220px;
+            height: 220px;
+            position: relative;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Lingkaran Emas Tipis */
+        .couple-circle-frame::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--inv-accent);
+            border-radius: 50%;
+            top: -5px;
+            left: -5px;
+        }
+        
+        .couple-circle-frame::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--inv-accent);
+            border-radius: 50%;
+        }
+
+        .couple-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hiasan Bunga di Bawah Lingkaran */
+        .flower-accent {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-family: var(--font-latin);
+            font-size: 3rem;
+            color: var(--inv-accent);
+            margin: 10px 0;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .sub-title {
+            font-family: var(--font-body);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .guest-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(2px);
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* Section Salam - Frame Lengkung */
+        .arch-frame {
+            width: 240px;
+            height: 320px;
+            border: 3px solid var(--inv-border);
+            border-radius: 120px 120px 0 0; /* Membuat lengkungan atas */
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .arch-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 110px 110px 0 0;
+        }
+
+        /* Section Mempelai */
+        .couple-item {
+            margin-bottom: 25px;
+        }
+        .couple-thumb {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--inv-accent);
+            padding: 3px;
+            margin: 0 auto 10px auto;
+        }
+        .couple-thumb img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .couple-name {
+            font-family: var(--font-header);
+            font-size: 1.2rem;
+            color: var(--inv-accent);
+            margin-bottom: 5px;
+        }
+        .couple-parents {
+            font-size: 0.8rem;
+            color: #ddd;
+            line-height: 1.4;
+        }
+
+        /* Navigasi Bawah (Mirip Asli) */
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            background: #dcd1c5; /* Warna krem menu asli */
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #003f30; /* Warna hijau gelap untuk ikon */
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .nav-item i {
+            margin-bottom: 2px;
+        }
+
+        /* Overlay Buka Undangan */
+        #cover-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: var(--inv-bg);
+            background-image: url('http://dwigital.com/themes/bugis-emerald/bg.webp');
+            background-size: cover;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        
+        #cover-overlay.open {
+            transform: translateY(-100%);
+        }
+
+        .btn-open {
+            background-color: var(--inv-accent);
+            color: var(--inv-bg);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-family: var(--font-body);
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <!-- Aset Dekorasi (Pilar & Sudut) - Menggunakan Link Asli -->
+        <img src="http://dwigital.com/themes/bugis-emerald/left.webp" class="frame-decor frame-top-left animate__animated animate__fadeInLeft" alt="">
+        <img src="http://dwigital.com/themes/bugis-emerald/right.webp" class="frame-decor frame-top-right animate__animated animate__fadeInRight" alt="">
+        <!-- Pilar Kiri & Kanan (Menggunakan gambar 'bm.webp' sebagai pengganti pilar sementara/crop) -->
+        <!-- Catatan: Di file asli 'bm' adalah bottom middle, tapi kita gunakan structure CSS border pilar -->
+        <div style="position:absolute; top:0; bottom:0; left:0; width: 15px; background: url('http://dwigital.com/themes/bugis-emerald/bg.webp'); border-right: 2px solid rgba(255,255,255,0.2); z-index:9;"></div>
+        <div style="position:absolute; top:0; bottom:0; right:0; width: 15px; background: url('http://dwigital.com/themes/bugis-emerald/bg.webp'); border-left: 2px solid rgba(255,255,255,0.2); z-index:9;"></div>
+        
+        <img src="http://dwigital.com/themes/bugis-emerald/bl.webp" class="frame-decor frame-bottom-left animate__animated animate__fadeInUp" alt="">
+        <img src="http://dwigital.com/themes/bugis-emerald/br.webp" class="frame-decor frame-bottom-right animate__animated animate__fadeInUp" alt="">
+
+        <!-- COVER OVERLAY (Halaman Depan Sebelum Dibuka) -->
+        <div id="cover-overlay">
+            <div class="couple-circle-frame animate__animated animate__zoomIn">
+                <!-- Foto Cover Bulat -->
+                <img src="https://via.placeholder.com/400x400/333/fff?text=Cover+Photo" class="couple-img" alt="Cover">
+                <!-- Gambar Bunga di Bawah Lingkaran (Placeholder style floral) -->
+                 <!-- Kita pakai CSS border radius dulu karena aset bunga spesifik 'flower-accent' tidak ada link langsungnya di snippet, kita pakai dekorasi sudut -->
+            </div>
+            
+            <div class="text-center animate__animated animate__fadeInUp animate__delay-1s">
+                <h1 class="main-title">Lisa & Palmer</h1>
+                <p class="sub-title">The Wedding Celebration</p>
+                <div class="guest-box">
+                    <p style="font-size: 12px;">Kepada Yth:</p>
+                    <h3 style="color: var(--inv-accent); margin: 5px 0;">Nama Tamu</h3>
+                </div>
+                <button class="btn-open" onclick="openInvitation()">Buka Undangan</button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: OPENING (Setelah Buka) -->
+        <section id="opening">
+            <div class="wedding-date animate__animated animate__fadeInDown">12 ✤ 05 ✤ 25</div>
+            
+            <div class="couple-circle-frame animate__animated animate__zoomIn">
+                <img src="https://via.placeholder.com/400x400/333/fff?text=Couple" class="couple-img" alt="Couple">
+            </div>
+
+            <h1 class="main-title animate__animated animate__fadeInUp">Lisa & Palmer</h1>
+            <p class="sub-title animate__animated animate__fadeInUp">Save The Date</p>
+        </section>
+
+        <!-- SECTION 2: SALAM (Frame Lengkung) -->
+        <section id="salam">
+            <div class="arch-frame animate__animated animate__fadeInDown">
+                <!-- Foto Sendiri Wanita (Arch Shape) -->
+                <img src="https://via.placeholder.com/300x400/333/fff?text=Bride" class="arch-img" alt="Bride Single">
+            </div>
+            <h2 class="main-title" style="font-size: 2rem;">Assalamu'alaikum</h2>
+            <p style="font-size: 14px; line-height: 1.6; margin-top: 10px;">
+                Tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i pada acara resepsi pernikahan anak kami.
+            </p>
+        </section>
+
+        <!-- SECTION 3: MEMPELAI (Couple) -->
+        <section id="mempelai">
+            <div class="couple-item animate__animated animate__fadeInLeft">
+                <div class="couple-thumb">
+                    <img src="https://via.placeholder.com/150" alt="Lisa">
+                </div>
+                <h3 class="couple-name">Lisa Blackpink, S.Pd.</h3>
+                <div class="couple-parents">
+                    Putri Pertama dari<br>Bapak Pep Guardiola<br>& Ibu Happy Guardiola
+                </div>
+            </div>
+
+            <h1 style="font-family: var(--font-latin); color: var(--inv-accent); margin: 10px 0;">&</h1>
+
+            <div class="couple-item animate__animated animate__fadeInRight">
+                <div class="couple-thumb">
+                    <img src="https://via.placeholder.com/150" alt="Palmer">
+                </div>
+                <h3 class="couple-name">Cole Palmer, S.Kom.</h3>
+                <div class="couple-parents">
+                    Putra Pertama dari<br>Bapak Jose Mourinho<br>& Ibu Happy Mourinho
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: AKAD & RESEPSI -->
+        <section id="event">
+            <h2 class="main-title" style="font-size: 2rem;">Akad Nikah</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; border: 1px solid var(--inv-border); margin-top: 20px;">
+                <p style="font-size: 3rem; font-family: var(--font-header); line-height: 1;">23</p>
+                <p style="text-transform: uppercase; letter-spacing: 2px;">Juni 2024</p>
+                <hr style="border-color: rgba(255,255,255,0.3); margin: 15px 0;">
+                <p style="font-weight: bold;">08:00 WIB - Selesai</p>
+                <p style="margin-top: 10px; font-size: 12px;">Jl. Gatot Subroto No. 123, Medan</p>
+            </div>
+            <button class="btn-open" style="padding: 10px 20px; font-size: 12px; margin-top: 20px;">Lihat Lokasi</button>
+        </section>
+
+        <!-- NAVIGASI BAWAH (Menu) -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="switchSection('opening', this)">
+                <i data-lucide="mail"></i>
+                <span>Cover</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('salam', this)">
+                <i data-lucide="file-text"></i>
+                <span>Salam</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('mempelai', this)">
+                <i data-lucide="heart"></i>
+                <span>Mempelai</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('event', this)">
+                <i data-lucide="calendar"></i>
+                <span>Acara</span>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Inisialisasi Icon
+        lucide.createIcons();
+
+        // Logika Buka Undangan
+        function openInvitation() {
+            document.getElementById('cover-overlay').classList.add('open');
+            // Tampilkan section pertama setelah cover terbuka
+            setTimeout(() => {
+                document.getElementById('opening').classList.add('active');
+            }, 500);
+            
+            // Putar Musik (Optional, perlu interaksi user)
+            // const audio = new Audio('path/to/music.mp3');
+            // audio.play();
+        }
+
+        // Logika Ganti Section
+        function switchSection(sectionId, navElement) {
+            // 1. Sembunyikan semua section
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // 2. Tampilkan section tujuan
+            const target = document.getElementById(sectionId);
+            target.classList.add('active');
+
+            // 3. Reset Animasi (agar efek muncul ulang setiap diklik)
+            target.querySelectorAll('.animate__animated').forEach(el => {
+                const animClasses = Array.from(el.classList).filter(c => c.startsWith('animate__'));
+                el.classList.remove(...animClasses);
+                void el.offsetWidth; // Trigger Reflow
+                el.classList.add(...animClasses);
+            });
+
+            // 4. Update Navigasi Aktif
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            navElement.classList.add('active');
+        }
+    </script>
+</body>
+</html>
