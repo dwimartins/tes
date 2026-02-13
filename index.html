@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Adat Bugis 03 - Green Emerald</title>
     
-    <!-- Google Fonts Replacement (Mendekati Font Asli) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,17 +18,24 @@
 
     <style>
         :root {
-            --inv-bg: #003f30;
+            --inv-bg: #003f30; /* Hijau Emerald Gelap */
             --inv-base: #ffffff;
-            --inv-accent: #f9e7bc;
+            --inv-accent: #f9e7bc; /* Emas */
             --inv-border: #7b938f;
+            
+            /* Font */
             --font-base: "Work Sans", sans-serif;
-            --font-accent: 'Cinzel', serif; /* Pengganti Laraboyok */
-            --font-latin: 'Great Vibes', cursive; /* Pengganti Javassoul */
-            --menu-bg: #dcd1c5;
-            --menu-inactive: #003f30;
-            --menu-active: #bbaa98;
+            --font-accent: 'Cinzel', serif; 
+            --font-latin: 'Great Vibes', cursive; 
+            
+            /* Menu Colors (Revised based on Screenshot) */
+            --menu-bg: #e6dcd1; /* Krem Beige */
+            --menu-inactive: #003f30; /* Hijau text */
+            --menu-active-bg: #003f30; /* Hijau tombol aktif */
+            --menu-active-text: #f9e7bc; /* Emas text aktif */
+            
             --btn-color: #032619;
+            --pillar-color: #e6dcd1; /* Warna Pilar */
         }
 
         body {
@@ -58,15 +65,41 @@
             width: 100%; height: 100%;
             max-width: 480px; /* Limit lebar seperti HP */
             margin: 0 auto;
+            /* Background Hijau Tekstur */
             background-image: url('http://dwigital.com/themes/bugis-emerald/bg.webp');
             background-size: cover;
             background-position: center;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        /* --- SLIDER SYSTEM (Satumomen style) --- */
+        /* --- PILAR (REVISI 1: Full Height) --- */
+        .pillar-side {
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 35px; /* Lebar pilar */
+            background: var(--pillar-color);
+            background-image: linear-gradient(to right, #dcd1c5, #ebe2d8, #dcd1c5); /* Efek 3D */
+            z-index: 15; /* Di atas background, di bawah bunga */
+            border-left: 1px solid rgba(255,255,255,0.3);
+            border-right: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+        }
+        .pillar-left { left: 0; border-right: 2px solid #bbaa98; }
+        .pillar-right { right: 0; border-left: 2px solid #bbaa98; }
+        
+        /* Garis-garis pada pilar (detail ornamen) */
+        .pillar-side::after {
+            content: ''; position: absolute;
+            top: 50px; bottom: 100px;
+            left: 10px; right: 10px;
+            border-left: 1px solid rgba(0,0,0,0.1);
+            border-right: 1px solid rgba(0,0,0,0.1);
+        }
+
+        /* --- SLIDER SYSTEM --- */
         .satumomen_track { width: 100%; height: 100%; }
         .satumomen_list {
             list-style: none; padding: 0; margin: 0;
@@ -76,60 +109,68 @@
         .satumomen_slide {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            display: none; /* Hidden by default */
-            z-index: 1;
-            overflow-y: auto; /* Scroll content inside slide */
-            padding-bottom: 100px; /* Space for menu */
+            display: none; 
+            z-index: 5;
+            overflow-y: auto; 
+            padding-bottom: 120px; /* Space for navbar */
             scrollbar-width: none;
         }
-        .satumomen_slide.active { display: block; animation: fadeIn 0.5s; }
+        .satumomen_slide::-webkit-scrollbar { display: none; }
+        .satumomen_slide.active { display: block; animation: fadeIn 0.8s; }
         .satumomen_slide.satumomen_cover { z-index: 999; padding-bottom: 0; }
 
         /* --- FRAMES & DECORATION --- */
         .frame {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 10;
+            pointer-events: none; z-index: 20; /* Di atas pilar */
         }
-        .frame img { position: absolute; max-width: 35%; }
-        .frame-tl { top: 0; left: 0; }
-        .frame-tr { top: 0; right: 0; }
-        .frame-bl { bottom: 0; left: 0; }
-        .frame-br { bottom: 0; right: 0; }
-        .frame-bm { bottom: 0; left: 0; width: 100% !important; max-width: 100% !important; }
+        .frame img { position: absolute; }
+        
+        /* Bunga Sudut */
+        .frame-tl { top: 0; left: 0; width: 45%; max-width: 180px; }
+        .frame-tr { top: 0; right: 0; width: 45%; max-width: 180px; }
+        .frame-bl { bottom: 0; left: 0; width: 40%; max-width: 150px; }
+        .frame-br { bottom: 0; right: 0; width: 40%; max-width: 150px; }
+        /* Ornamen Bawah Tengah */
+        .frame-bm { bottom: 0; left: 0; width: 100%; height: auto; z-index: 19; }
 
-        /* Frame Couple (Cover) */
+        /* Frame Couple (Bulat Cover) */
         .frame-couple { position: relative; display: flex; align-items: center; justify-content: center; }
         .frame-couple::after {
             content: ''; position: absolute;
-            width: 260px; height: 260px;
+            width: 270px; height: 270px;
             background-image: url(http://dwigital.com/themes/bugis-emerald/frame-couple.webp);
             background-size: contain; background-repeat: no-repeat; background-position: center;
             z-index: 1; pointer-events: none;
         }
-        .frame-couple img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+        .frame-couple img { width: 210px; height: 210px; border-radius: 50%; object-fit: cover; }
 
         /* Frame Mempelai (Small) */
         .frame-mempelai { position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
         .frame-mempelai::after {
             content: ''; position: absolute;
-            width: 130px; height: 130px;
+            width: 140px; height: 140px;
             background-image: url(http://dwigital.com/themes/bugis-emerald/frame-couple.webp);
             background-size: contain; background-repeat: no-repeat; background-position: center;
             z-index: 1; pointer-events: none;
         }
-        .frame-mempelai img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
+        .frame-mempelai img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; }
 
-        /* --- MENU NAVIGATION --- */
+        /* --- MENU NAVIGATION (REVISI 2: Sesuai Contoh) --- */
         .satumomen_menu {
-            position: absolute; bottom: 20px; left: 0; width: 100%;
+            position: absolute; bottom: 20px; left: 0; right: 0;
             z-index: 1000; display: flex; justify-content: center;
         }
         .satumomen_menu_list {
-            display: flex; gap: 5px;
+            display: flex; 
+            gap: 10px;
             background: var(--menu-bg);
-            padding: 8px 15px; border-radius: 50px;
-            max-width: 95%; overflow-x: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 10px 15px; 
+            border-radius: 25px 25px 0 0; /* Rounded top or full rounded usually */
+            border-radius: 50px; /* Full capsule based on screenshot */
+            max-width: 95%; 
+            overflow-x: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
             list-style: none; margin: 0;
             scrollbar-width: none;
         }
@@ -137,32 +178,47 @@
         
         .satumomen_menu_item {
             flex: 0 0 auto;
-            width: 55px; height: 55px;
+            min-width: 50px; height: 50px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            border-radius: 50%;
+            border-radius: 12px; /* Sedikit kotak rounded */
             color: var(--menu-inactive);
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer; transition: all 0.3s ease;
+            background: transparent;
         }
-        .satumomen_menu_item svg, .satumomen_menu_item i { width: 24px; height: 24px; margin-bottom: 2px; }
-        .satumomen_menu_item span { font-size: 9px; font-weight: 600; display: block; }
-        .satumomen_menu_item.active { background-color: var(--menu-active); color: #fff; }
+        .satumomen_menu_item svg, .satumomen_menu_item i { 
+            width: 22px; height: 22px; margin-bottom: 2px; fill: currentColor; 
+        }
+        .satumomen_menu_item span { 
+            font-size: 9px; font-weight: 600; display: block; 
+        }
+        
+        /* Active State (Hijau Gelap, Text Putih/Emas) */
+        .satumomen_menu_item.active { 
+            background-color: var(--menu-active-bg); 
+            color: var(--menu-active-text);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,63,48,0.3);
+        }
 
         /* --- COMPONENTS --- */
         .btn-primary {
             background-color: var(--inv-accent); border-color: var(--inv-accent);
             color: var(--btn-color); font-weight: bold;
+            box-shadow: 0 4px 15px rgba(249, 231, 188, 0.4);
         }
         .btn-primary:hover { background-color: #e6d3a8; border-color: #e6d3a8; color: var(--btn-color); }
         
+        /* Floating Music Button */
         .floating-action {
-            position: absolute; bottom: 100px; right: 20px; z-index: 1000;
+            position: absolute; bottom: 110px; right: 20px; z-index: 1000;
         }
         .btn-float {
             width: 45px; height: 45px; border-radius: 50%;
             background: rgba(255,255,255,0.2); border: 1px solid var(--inv-accent);
             color: var(--inv-accent); display: flex; align-items: center; justify-content: center;
             margin-top: 10px; cursor: pointer; animation: spin 4s linear infinite;
+            backdrop-filter: blur(4px);
         }
         .btn-float.paused { animation-play-state: paused; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -197,9 +253,16 @@
         <!-- CONTAINER -->
         <div class="container-mobile">
             
-            <!-- FRAME DECORATION (Fixed Layer) -->
+            <!-- PILAR (Fixed Layer) -->
+            <div class="pillar-side pillar-left"></div>
+            <div class="pillar-side pillar-right"></div>
+
+            <!-- FRAME DECORATION (Fixed Layer - Animasi Ulang) -->
             <div class="frame">
-                <img src="http://dwigital.com/themes/bugis-emerald/bm.webp" class="frame-bm animate__animated animate__fadeInUp animate__slower">
+                <!-- Ornamen Bawah -->
+                <img src="http://dwigital.com/themes/bugis-emerald/bm.webp" class="frame-bm animate__animated animate__fadeInUp animate__slow">
+                
+                <!-- Bunga Sudut -->
                 <img src="http://dwigital.com/themes/bugis-emerald/left.webp" class="frame-tl animate__animated animate__fadeInLeft animate__slower">
                 <img src="http://dwigital.com/themes/bugis-emerald/right.webp" class="frame-tr animate__animated animate__fadeInRight animate__slower">
                 <img src="http://dwigital.com/themes/bugis-emerald/bl.webp" class="frame-bl animate__animated animate__fadeInBottomLeft animate__slow">
@@ -215,7 +278,8 @@
                         <div class="text-center animate__animated animate__fadeInDown animate__slower" style="font-size: 16px;">12 ✤ 05 ✤ 25</div>
                         
                         <div class="py-4 frame-couple mx-auto animate__animated animate__zoomIn animate__slower">
-                            <img src="https://via.placeholder.com/300" alt="Cover Couple">
+                            <!-- REVISI 3: Ganti URL Gambar dengan assets.satumomen... -->
+                            <img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" alt="Cover Couple">
                         </div>
 
                         <div class="mt-4 text-center animate__animated animate__fadeInUp animate__slower mb-3">
@@ -239,7 +303,8 @@
                 <li class="satumomen_slide" id="slide-1">
                     <div class="d-flex justify-content-center flex-column h-100" style="padding-top: 80px;">
                         <div class="mx-auto animate__animated animate__fadeInDown animate__slower" style="height: 70%; width: 80%; overflow: hidden; border: 3px solid var(--inv-border); border-radius: 0 0 200px 200px; padding: 10px;">
-                            <img src="https://via.placeholder.com/300x500" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0 0 200px 200px;">
+                            <!-- Ganti URL Gambar -->
+                            <img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0 0 200px 200px;">
                         </div>
                         <div class="text-center mt-3 animate__animated animate__fadeInUp animate__slower p-3">
                             <div class="mb-2 font-accent color-accent" style="font-size: 24px;">Assalamu'alaikum Wr Wb</div>
@@ -253,7 +318,8 @@
                     <div class="d-flex justify-content-center align-items-center h-100 flex-column">
                         <!-- Wanita -->
                         <div class="frame-mempelai animate__animated animate__zoomIn animate__slower">
-                            <img src="https://via.placeholder.com/150" alt="Lisa">
+                            <!-- Ganti URL Gambar -->
+                            <img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" alt="Lisa">
                         </div>
                         <div class="text-center animate__animated animate__fadeInLeft animate__slower mb-3">
                             <div class="color-accent font-accent" style="font-size: 24px;">Lisa Blackpink, S.Pd.</div>
@@ -268,7 +334,8 @@
                             <div style="font-size: 12px;">Putra Pertama dari<br>Bapak Jose & Ibu Happy</div>
                         </div>
                          <div class="frame-mempelai animate__animated animate__zoomIn animate__slower mt-2">
-                            <img src="https://via.placeholder.com/150" alt="Palmer">
+                            <!-- Ganti URL Gambar -->
+                            <img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" alt="Palmer">
                         </div>
                     </div>
                 </li>
@@ -343,10 +410,11 @@
                     <div class="d-flex flex-column justify-content-center align-items-center h-100 px-2 text-center">
                         <div class="color-accent font-latin h3 mb-4 animate__animated animate__fadeInDown">Galeri Foto</div>
                         <div class="row w-100">
-                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://via.placeholder.com/200" class="w-100 rounded"></div>
-                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://via.placeholder.com/200" class="w-100 rounded"></div>
-                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://via.placeholder.com/200" class="w-100 rounded"></div>
-                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://via.placeholder.com/200" class="w-100 rounded"></div>
+                            <!-- Ganti URL Gambar Galeri -->
+                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" class="w-100 rounded"></div>
+                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" class="w-100 rounded"></div>
+                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" class="w-100 rounded"></div>
+                            <div class="col-6 p-1 animate__animated animate__zoomIn"><img src="https://assets.satumomen.com/images/galleries/704712-gallery-4QTyU4InZ6.png" class="w-100 rounded"></div>
                         </div>
                     </div>
                 </li>
@@ -516,15 +584,22 @@
                 target.style.display = 'block';
                 target.classList.add('active');
 
-                // Re-trigger Animations
+                // Re-trigger Animations (Content)
                 const animatedElements = target.querySelectorAll('.animate__animated');
                 animatedElements.forEach(el => {
-                    const oldAnim = el.style.animation;
                     el.style.animation = 'none';
                     el.offsetHeight; /* trigger reflow */
                     el.style.animation = null;
                 });
             }
+
+            // REVISI 4: Re-trigger Animations (Frame Decorations - Bunga & Pilar)
+            const frameDecorations = document.querySelectorAll('.frame img');
+            frameDecorations.forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight; /* trigger reflow */
+                el.style.animation = null;
+            });
 
             // Update Menu Active State
             const menuItems = document.querySelectorAll('.satumomen_menu_item');
